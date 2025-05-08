@@ -10,25 +10,32 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-    
         headerShown: false,
- 
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
+        tabBarActiveTintColor: 'red',
+        tabBarStyle: {
+          height: 40,
+          paddingBottom: 20,
+          flexDirection: 'row',
+        },
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Скачки',
+          tabBarIcon: ()=>null
 
         }}
       />
-   
+
+      <Tabs.Screen
+        name="history"
+        options={{
+          title: 'История',
+          tabBarIcon: ()=>null
+
+        }}
+      />
+
     </Tabs>
   );
 }

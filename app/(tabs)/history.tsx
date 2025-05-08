@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface RaceResult {
     winner: number;
@@ -35,19 +36,20 @@ const HistoryScreen: React.FC = () => {
     }, []);
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>История скачек</Text>
-            {history.length === 0 ? (
-                <Text style={styles.empty}>Пока нет записей</Text>
-            ) : (
-                history.map((item, index) => (
-                    <View key={index} style={styles.item}>
-                        <Text>🏆 Победила лошадь №{item.winner}</Text>
-                        <Text style={styles.time}>🕒 {item.time}</Text>
-                    </View>
-                ))
-            )}
-        </ScrollView>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Text style={styles.title}>История скачек</Text>
+                {history.length === 0 ? (
+                    <Text style={styles.empty}>Пока нет записей</Text>
+                ) : (
+                    history.map((item, index) => (
+                        <View key={index} style={styles.item}>
+                            <Text>🏆 Победила лошадь №{item.winner}</Text>
+                            <Text style={styles.time}>🕒 {item.time}</Text>
+                        </View>
+                    ))
+                )}
+            </ScrollView>
+
     );
 };
 
