@@ -16,6 +16,9 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "androidNavigationBar": {
+        "visible": "immersive"
+      },
       "edgeToEdgeEnabled": true
     },
     "web": {
