@@ -31,7 +31,7 @@ const HistoryScreen: React.FC = () => {
 
         const unsubscribe = loadHistory();
         return () => {
-            // nothing to clean up
+         
         };
     }, []);
 

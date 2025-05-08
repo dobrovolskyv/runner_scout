@@ -1,12 +1,17 @@
 // app/(tabs)/index.tsx
 import React, { useRef, useState } from 'react';
-import { View, Text, Button, StyleSheet, Animated, Dimensions } from 'react-native';
+import { View, Text, Button, StyleSheet, Animated, Dimensions, ImageBackground, Image } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const { height } = Dimensions.get('window');
+import TrackImg from "../../assets/images/track.png"
+import Flag from "../../assets/images/flag.png"
+import Horse from "../../assets/images/horse.png"
+
+const { width, height } = Dimensions.get('window');
 const HORSE_COUNT = 5;
-const TRACK_LENGTH = height - 340;
+const TRACK_HEIGHT = height - 280;
 
 const getRandomDuration = () => 2000 + Math.random() * 3000;
 
@@ -24,7 +29,7 @@ export default function RaceScreen() {
 
         const animations = horses.map((horse, index) =>
             Animated.timing(horse, {
-                toValue: TRACK_LENGTH,
+                toValue: TRACK_HEIGHT,
                 duration: durations[index],
                 useNativeDriver: false,
             })
@@ -56,47 +61,68 @@ export default function RaceScreen() {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.track}>
-                {horses.map((anim, index) => (
-                    <View key={index} style={styles.lane}>
-                        <Animated.View
-                            style={[styles.horse, { transform: [{ translateY: anim }] }]}
-                        >
-                            <Text>🐎  {index + 1}</Text>
-                        </Animated.View>
-                        <View style={styles.finishFlag}>
-                            <Text style={{ fontSize: 16 }}>🏁</Text>
-                        </View>
+        <SafeAreaView style={styles.container}>
+
+
+            <ImageBackground
+                source={TrackImg}
+                style={{ width, height }}
+                resizeMode='stretch'
+            >
+                <View style={styles.wrapper}>
+
+                    <View style={styles.track} >
+                        {horses.map((anim, index) => (
+                            <View key={index} style={styles.lane}>
+                                <Animated.View
+                                    style={[styles.horse, { transform: [{ translateY: anim }] }]}
+                                >
+                                   <Image source={Horse} style={styles.horseImage} resizeMode='contain' />
+                                </Animated.View>
+                              
+                                    <Image source={Flag} style={styles.finishFlag} resizeMode='contain'/>
+                             
+                            </View>
+                        ))}
                     </View>
-                ))}
-            </View>
 
-            <View style={styles.buttonContainer}>
-                <Button title="Старт" onPress={startRace} disabled={isRunning} />
-                <Button title="Рестарт" onPress={resetRace} disabled={isRunning} />
-            </View>
-            <View style={styles.resultWrapper}>
-                {winner !== null && (
-                    <Text style={styles.result}>Победила лошадь №{winner + 1}!</Text>
-                )}
-            </View>
+                    <View style={styles.buttonContainer}>
+                        <Button style={styles.btn} title="Старт" onPress={startRace} disabled={isRunning} />
+                        <Button style={styles.btn} title="Рестарт" onPress={resetRace} disabled={isRunning} />
+                    </View>
+                    <View style={styles.resultWrapper}>
+                        {winner !== null && (
+                            <Text style={styles.result}>Победила лошадь №{winner + 1}!</Text>
+                        )}
+                    </View>
+                </View>
+            </ImageBackground>
 
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
-        backgroundColor: '#fff',
+
     },
+    background: {
+        flex: 1,
+        width,
+        height,
+
+    },
+    wrapper: {
+        flex: 1,
+        justifyContent: 'space-between',
+        paddingBottom: 150,
+      },
     track: {
+        flex:1,
         flexDirection: 'row',
         justifyContent: 'space-around',
-        flex: 1,
-        marginBottom: 20,
+        marginBottom: 0,
     },
     lane: {
         flex: 1,
@@ -105,21 +131,21 @@ const styles = StyleSheet.create({
         position: 'relative',
         borderLeftWidth: 2,
         borderLeftColor: '#ddd',
-  
         flexDirection: 'column',
     },
     horse: {
         position: 'absolute',
         top: 0,
-        backgroundColor: '#d2f4ea',
-        paddingVertical: 8,
-        paddingHorizontal: 10,
-        borderRadius: 10,
-       
-      
+        right: 10
+    },
+    horseImage:{
+        width: 40,
+        height: 40
     },
     finishFlag: {
         position: 'absolute',
+        width: 40,
+        height: 40,
         bottom: 30,
         marginBottom: 10,
     },
@@ -127,13 +153,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
-    resultWrapper:{
+    btn:{
+        fontSize: 30,
+        color: "white"
+    },
+    resultWrapper: {
         height: 60
     },
     result: {
         marginTop: 20,
         textAlign: 'center',
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: 'bold',
+        color: 'white'
     },
 });

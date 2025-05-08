@@ -1,10 +1,9 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
 
   return (
     <Tabs
@@ -12,21 +11,17 @@ export default function TabLayout() {
         headerShown: false,
         tabBarActiveTintColor: 'red',
         tabBarInactiveTintColor: 'white',
-        tabBarLabelStyle: {
-          fontSize: 22
-        },
         tabBarStyle: {
-          backgroundColor: '#418b94',
           height: 60,
-          paddingBottom: 0, 
-          paddingTop: 0,
-     
+          paddingBottom: 10,
+          paddingTop: 5,
+          backgroundColor: '#458d94',
         },
-        tabBarItemStyle:{
+        tabBarLabelStyle: {
+          fontSize: 14,
+        },
+        tabBarItemStyle: {
           justifyContent: 'center',
-          alignItems: 'center',
-          paddingBottom: 0,
-          paddingTop: 0
         },
      
       }}>

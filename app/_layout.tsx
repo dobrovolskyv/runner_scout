@@ -1,24 +1,27 @@
-import { View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { Slot, useRouter } from 'expo-router'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+// app/_layout.tsx
+import { Slot, usePathname, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Applayout() {
-    const [loading, setLoading] = useState(true)
-    const router = useRouter()
+export default function AppLayout() {
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
+    const pathname = usePathname()
 
-    useEffect(()=>{
-        (async ()=>{
-            const visited = await AsyncStorage.getItem('hasVisited')
-            if (visited) {
-                router.replace('/welcome')
+    useEffect(() => {
+        (async () => {
+            const visited = await AsyncStorage.getItem('hasVisited');
+            if (!visited && pathname !== '/welcome') {
+                console.log('redirecting...');
+                router.replace('/welcome');
+                return;
             }
-            setLoading(false)   
-        })
-    },[])
+            setLoading(false);
+        })();
+    }, [pathname]);
 
-    if(loading) return null
-    return (
-        <Slot/>
-    )
+
+    if (loading) return null;
+
+    return <Slot />;
 }
