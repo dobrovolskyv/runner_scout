@@ -2,6 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Entypo from '@expo/vector-icons/Entypo';
 
 
 interface RaceResult {
@@ -31,31 +35,45 @@ const HistoryScreen: React.FC = () => {
 
         const unsubscribe = loadHistory();
         return () => {
-         
+
         };
     }, []);
 
     return (
+        <SafeAreaView style={styles.wrapper}>
             <ScrollView contentContainerStyle={styles.container}>
                 <Text style={styles.title}>История скачек</Text>
                 {history.length === 0 ? (
                     <Text style={styles.empty}>Пока нет записей</Text>
                 ) : (
                     history.map((item, index) => (
-                        <View key={index} style={styles.item}>
-                            <Text>🏆 Победила лошадь №{item.winner}</Text>
-                            <Text style={styles.time}>🕒 {item.time}</Text>
+                        <View key={index} style={styles.score}>
+                             <View style={styles.scoreItem}>
+                                <Entypo name="bell" size={24} color="black" />
+                                <Text> Победила лошадь №{item.winner}</Text>
+                            </View>
+
+                          
+                            <View style={styles.scoreItem}>
+                                <MaterialIcons name="access-time" size={24} color="black" />
+                                <Text style={styles.time}>{item.time}</Text>
+                            </View>
+
                         </View>
                     ))
                 )}
             </ScrollView>
-
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    wrapper: {
+        flex: 1
+
+    },
     container: {
-        padding: 20,
+        padding: 10,
         alignItems: 'center',
     },
     title: {
@@ -68,12 +86,18 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#888',
     },
-    item: {
+    score: {
+       
         padding: 15,
         marginBottom: 10,
         backgroundColor: '#f2f2f2',
         borderRadius: 10,
         width: '100%',
+    },
+    scoreItem:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap:5,
     },
     time: {
         color: '#666',

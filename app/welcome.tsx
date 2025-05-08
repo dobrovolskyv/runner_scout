@@ -1,7 +1,10 @@
-import { View, Text, StyleSheet, Button, ImageBackground } from 'react-native'
+import { View, StyleSheet, ImageBackground, Dimensions, TouchableWithoutFeedback } from 'react-native'
 import React from 'react'
 import { useRouter } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+const { width, height } = Dimensions.get('window');
 
 const Welcome = () => {
     const router = useRouter();
@@ -13,31 +16,22 @@ const Welcome = () => {
 
     console.log('welcome screen visible')
     return (
-        <View style={styles.container} >
-
-            <Button title="" onPress={handleStart} />
+        <View  >
+            <TouchableWithoutFeedback onPress={handleStart}>
+                <ImageBackground source={require('../assets/images/welcome.png')} resizeMode='stretch' style={styles.container} />
+            </TouchableWithoutFeedback>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-        backgroundImage: './images/welcome.png'
+       width,
+       height
+   
+
     },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20
-    },
-    text: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginBottom: 30
-    },
+
 });
 
 export default Welcome;

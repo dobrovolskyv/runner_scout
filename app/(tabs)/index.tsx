@@ -1,17 +1,17 @@
 // app/(tabs)/index.tsx
 import React, { useRef, useState } from 'react';
-import { View, Text, Button, StyleSheet, Animated, Dimensions, ImageBackground, Image } from 'react-native';
+import { View, Text, Button, StyleSheet, Animated, Dimensions, ImageBackground, Image, TouchableOpacity, Alert } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { sendRaceNotification } from '@/utils/notifications';
 
-import TrackImg from "../../assets/images/track.png"
-import Flag from "../../assets/images/flag.png"
-import Horse from "../../assets/images/horse.png"
+
+
 
 const { width, height } = Dimensions.get('window');
 const HORSE_COUNT = 5;
-const TRACK_HEIGHT = height - 280;
+const TRACK_HEIGHT = height - 300;
 
 const getRandomDuration = () => 2000 + Math.random() * 3000;
 
@@ -23,8 +23,18 @@ export default function RaceScreen() {
     ).current;
 
     const startRace = async () => {
+        if (winner !== null || isRunning) {
+            Alert.alert(
+              'Подожди!',
+              'Сначала нажми "Рестарт", чтобы начать новую гонку.',
+              [{ text: 'Ок' }]
+            );
+            return;
+          }
         setIsRunning(true);
         setWinner(null);
+
+        horses.forEach((horse) => horse.setValue(0));
         const durations = horses.map(() => getRandomDuration());
 
         const animations = horses.map((horse, index) =>
@@ -45,13 +55,7 @@ export default function RaceScreen() {
                 JSON.stringify({ winner: winnerIndex + 1, time: new Date().toLocaleString() })
             );
 
-            await Notifications.scheduleNotificationAsync({
-                content: {
-                    title: 'Результаты скачек',
-                    body: `Победила лошадь №${winnerIndex + 1}!`,
-                },
-                trigger: null,
-            });
+            await sendRaceNotification(winnerIndex);
         });
     };
 
@@ -65,7 +69,7 @@ export default function RaceScreen() {
 
 
             <ImageBackground
-                source={TrackImg}
+                source={require('../../assets/images/track.png')}
                 style={{ width, height }}
                 resizeMode='stretch'
             >
@@ -77,18 +81,22 @@ export default function RaceScreen() {
                                 <Animated.View
                                     style={[styles.horse, { transform: [{ translateY: anim }] }]}
                                 >
-                                   <Image source={Horse} style={styles.horseImage} resizeMode='contain' />
+                                   <Image source={require('../../assets/images/horse.png')} style={styles.horseImage} resizeMode='contain' />
                                 </Animated.View>
                               
-                                    <Image source={Flag} style={styles.finishFlag} resizeMode='contain'/>
+                                    <Image source={require('../../assets/images/flag.png')} style={styles.finishFlag} resizeMode='contain'/>
                              
                             </View>
                         ))}
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <Button style={styles.btn} title="Старт" onPress={startRace} disabled={isRunning} />
-                        <Button style={styles.btn} title="Рестарт" onPress={resetRace} disabled={isRunning} />
+                        <TouchableOpacity  onPress={startRace} disabled={isRunning}>
+                       <Text  style={styles.btn}>Старт</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity  onPress={resetRace} disabled={isRunning} >
+                        <Text style={styles.btn}>Рестарт</Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.resultWrapper}>
                         {winner !== null && (
@@ -105,7 +113,7 @@ export default function RaceScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
+    
     },
     background: {
         flex: 1,
@@ -116,7 +124,7 @@ const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
         justifyContent: 'space-between',
-        paddingBottom: 150,
+        paddingBottom: 140,
       },
     track: {
         flex:1,
@@ -144,10 +152,10 @@ const styles = StyleSheet.create({
     },
     finishFlag: {
         position: 'absolute',
-        width: 40,
-        height: 40,
-        bottom: 30,
-        marginBottom: 10,
+        width: 50,
+        height: 50,
+        bottom: 15,
+
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -155,7 +163,11 @@ const styles = StyleSheet.create({
     },
     btn:{
         fontSize: 30,
-        color: "white"
+        color: "black",
+        backgroundColor: 'white',
+        padding: 5,
+        borderRadius: 10,
+        marginTop: 20
     },
     resultWrapper: {
         height: 60
