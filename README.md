@@ -17,10 +17,10 @@ npm install <br/>
 npx expo start <br/>
 
 
-Чтобы каждый раз видеть welcome-экран при hot reload:
-надо раскоментировать-  await AsyncStorage.removeItem('hasVisited');
-в файле app/_layout.tsx 
-после запуска закомментировать и тогда перейдет на страницу с гонками иначе ничего не получится
+Чтобы каждый раз видеть welcome-экран при hot reload:<br/>
+надо раскоментировать-  await AsyncStorage.removeItem('hasVisited');<br/>
+в файле app/_layout.tsx <br/>
+после запуска закомментировать и тогда перейдет на страницу с гонками иначе ничего не получится<br/>
 
 
 Стек который применялся <br/>
