@@ -10,11 +10,11 @@
 - История гонок 
 - Welcome-экран при первом запуске
 
-Установка и запуск
-git clone https://github.com/your-username/horse-racing-app.git
-cd horse-racing-app
-npm install
-npx expo start
+Установка и запуск <br/>
+git clone https://github.com/your-username/horse-racing-app.git <br/>
+cd horse-racing-app <br/>
+npm install <br/>
+npx expo start <br/>
 
 
 Чтобы каждый раз видеть welcome-экран при hot reload:
@@ -23,10 +23,10 @@ npx expo start
 после запуска закомментировать и тогда перейдет на страницу с гонками иначе ничего не получится
 
 
-Стек который применялся
-React Native/expo
-TypeScript
-expo-router
-Animated API 
-AsyncStorage
-expo-notifications 
+Стек который применялся <br/>
+React Native/expo <br/>
+TypeScript <br/>
+expo-router <br/>
+Animated API <br/>
+AsyncStorage <br/>
+expo-notifications <br/>
